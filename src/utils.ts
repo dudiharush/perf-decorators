@@ -1,8 +1,11 @@
-
-export interface WithPerfData {__perfData: unknown[], logPref: ()=>void};
-
-export function hasPerfData(obj: any): obj is WithPerfData {
-  return (obj as WithPerfData).__perfData !== undefined
+export interface WithPerfData {
+  __perfData: unknown[];
+  logPref: () => void;
 }
 
-export const delay = (time: number) => new Promise((resolve) => setTimeout(resolve, time))
+export function hasPerfData(obj: any): obj is WithPerfData {
+  return (obj as WithPerfData).__perfData !== undefined;
+}
+
+export const delay = (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time));
