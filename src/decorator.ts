@@ -8,7 +8,7 @@ import { WithPerfData, hasPerfData } from "./utils";
  * Save the index of the decorated parameter (parameterIndex) as metadata of the current class (target) and method (propertyKey)
  */
 export function logParam(
-  target: Object,
+  target: NonNullable<unknown>,
   propertyKey: string | symbol,
   parameterIndex: number
 ) {
@@ -27,12 +27,12 @@ export function logParam(
 }
 
 export function perf(
-  target: Object,
+  target: NonNullable<unknown>,
   propertyKey: string,
   descriptor: PropertyDescriptor
 ) {
   const originalMethod = descriptor.value!;
-  descriptor.value = async function (...args: any[]) {
+  descriptor.value = async function (...args: unknown[]) {
     const requiredParamsIndices: number[] =
       Reflect.getOwnMetadata(loggedParamMetadataKey, target, propertyKey) || [];
     const loggedParamsValues = requiredParamsIndices.map(
@@ -55,9 +55,10 @@ export function perf(
   };
 }
 
-export function logPerf<T extends { new (...args: any[]): {} }>(
-  constructor: T
-) {
+export function logPerf<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends { new (...args: any[]): NonNullable<unknown> },
+>(constructor: T) {
   return class extends constructor implements WithPerfData {
     __perfData = [];
     logPref = () => {
@@ -66,11 +67,11 @@ export function logPerf<T extends { new (...args: any[]): {} }>(
   };
 }
 
-export function Prop(target: Object, propertyName: string) {
-  let value: any;
+export function Prop(target: unknown, propertyName: string) {
+  let value: unknown;
 
   Object.defineProperty(target, propertyName, {
-    set(newVal: any) {
+    set(newVal: unknown) {
       console.log(`setting ${propertyName} value to '${newVal}'`);
       value = newVal;
     },

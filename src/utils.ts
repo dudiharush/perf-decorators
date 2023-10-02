@@ -3,7 +3,7 @@ export interface WithPerfData {
   logPref: () => void;
 }
 
-export function hasPerfData(obj: any): obj is WithPerfData {
+export function hasPerfData(obj: unknown): obj is WithPerfData {
   return (obj as WithPerfData).__perfData !== undefined;
 }
 
